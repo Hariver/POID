@@ -309,20 +309,102 @@ void plotHistogram(QImage myImage, QCustomPlot *myPlot)
         {
             tempColorType = myImage.pixel(i,j);
             tempColor.setRgb(tempColorType);
-            yRed[tempColor.red()] += 1;
-            yGreen[tempColor.green()] += 1;
-            yBlue[tempColor.blue()] += 1;
+            yRed[tempColor.red()] += 1.0;
+            yGreen[tempColor.green()] += 1.0;
+            yBlue[tempColor.blue()] += 1.0;
         }
     }
     //Skalowanie histogramu do max 1!
+    maxValue = yRed[0];
 
+    for(int i=0; i <= 255; i++)
+    {
+        if(maxValue < yRed[i])
+            maxValue = yRed[i];
+        if(maxValue < yGreen[i])
+            maxValue = yGreen[i];
+        if(maxValue < yBlue[i])
+            maxValue = yBlue[i];
+    }
+
+    for(int i=0; i <= 255; i++)
+    {
+        yRed[i] = yRed[i] / (double)maxValue;
+        yGreen[i] = yGreen[i] / (double)maxValue;
+        yBlue[i] = yBlue[i] / (double)maxValue;
+    }
 
     //Rysowanie histogramu DO POPRAWY
     myPlot->addGraph();
+    myPlot->graph(0)->setPen(QPen(Qt::red));
     myPlot->graph(0)->setData(xAxis, yRed);
     myPlot->addGraph();
+    myPlot->graph(1)->setPen(QPen(Qt::green));
     myPlot->graph(1)->setData(xAxis, yGreen);
-    myPlot->xAxis->setRange(0,256);
-    myPlot->yAxis->setRange(0,3000);
+    myPlot->addGraph();
+    myPlot->graph(2)->setPen(QPen(Qt::blue));
+    myPlot->graph(2)->setData(xAxis, yBlue);
+    myPlot->xAxis->setLabel("Poziom jasności.");
+    myPlot->yAxis->setLabel("Poziom wypełnienia jasności.");
+    myPlot->xAxis->setRange(-1,256);
+    myPlot->yAxis->setRange(0,1.05);
     myPlot->replot();
+}
+
+QImage lowPassFilter(QImage myImage, int size)
+{
+    //Kolor
+    QColor tempColor;
+    QRgb tempColorType;
+    int tempRed = 0;
+    int tempGreen = 0;
+    int tempBlue = 0;
+
+    //Zmienne pomocnicze
+    int smallCounter = 0;
+
+    //Sprawdzenie formatu
+    if(myImage.format() != QImage::Format_RGB32)
+        myImage = myImage.convertToFormat(QImage::Format_RGB32);
+
+    //Filtr w pętli
+    for(int i=size; i<(myImage.width()-size); i++)
+    {
+        for(int j=size; j<(myImage.height()-size); j++)
+        {
+            //Obliczanie średniej arytmetycznej
+            for(int k=(-size); k <= size; k++)
+            {
+                for(int l=(-size); l <= size; l++)
+                {
+                   if(!(k == 0 && l == 0))
+                   {
+                   tempColorType = myImage.pixel(i+k,j+l);
+                   tempColor.setRgb(tempColorType);
+                   tempRed += tempColor.red();
+                   tempGreen += tempColor.green();
+                   tempBlue += tempColor.blue();
+                   smallCounter++;
+                   }
+                }
+            }
+
+            //Obliczenie średnie arytmetyczniej dla każdego koloru
+            tempRed = int((float)tempRed / (float)smallCounter);
+            tempGreen = int((float)tempGreen / (float)smallCounter);
+            tempBlue = int((float)tempBlue / (float)smallCounter);
+
+            //Przypisanie nowego piksela.
+            tempColor.setRgb(tempRed, tempGreen, tempBlue);
+            tempColorType = tempColor.rgb();
+            myImage.setPixel(i, j, tempColorType);
+
+            //Reset danych
+            smallCounter = 0;
+            tempRed = 0;
+            tempGreen = 0;
+            tempBlue = 0;
+        }
+    }
+    return myImage;
 }

@@ -15,6 +15,9 @@ Zadanie_1::Zadanie_1(QWidget *parent) :
     ui->setupUi(this);
     ui->label_pic->setStyleSheet("QLabel { background-color : white; color : black; }");
     ui->label_pic_copy->setStyleSheet("QLabel { background-color : white; color : black; }");
+
+    ui->plot->xAxis->setRange(-1,256);
+    ui->plot->yAxis->setRange(0,1.05);
 }
 
 Zadanie_1::~Zadanie_1()
