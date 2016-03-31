@@ -32,8 +32,8 @@ void Zadanie_1::on_actionOpen_triggered()
     dialog.setNameFilter(tr("Images(*.png *.xpm *.jpg)"));
     dialog.setViewMode(QFileDialog::Detail);
     QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Open Images"), "*.jpg",
-                                                    tr("All Files (*.*);;Image Files (*.png *.jpg *.bmp);;Test (.test)"));
+                                                    tr("Open Images"), "",
+                                                    tr("Image Files (*.png *.jpg *.bmp)"));
 
     if(!fileName.isEmpty())
     {
@@ -112,5 +112,33 @@ void Zadanie_1::on_pushButton_3_clicked()
 
 void Zadanie_1::on_pushButton_4_clicked()
 {
+    plotHistogram(myImageCopy, ui->plot);
+}
+
+void Zadanie_1::on_pushButton_5_clicked()
+{
+    int tempSize;
+    tempSize = ui->lineEdit->text().toInt();
+    myImageCopy = lowPassFilter(myImage, tempSize);
+    this->resize_label_pic_copy();
+    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+}
+
+void Zadanie_1::on_pushButton_6_clicked()
+{
+    myImageCopy = operatorRobertsV2(myImage);
+    this->resize_label_pic_copy();
+    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+}
+
+void Zadanie_1::on_pushButton_7_clicked()
+{
+    int tempGMin;
+    double tempAlfa;
+    tempGMin = ui->lineEdit_2->text().toInt();
+    tempAlfa = ui->lineEdit_3->text().toDouble();
+    myImageCopy = distributionRayleigh(myImage, tempGMin, tempAlfa);
+    this->resize_label_pic_copy();
+    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
     plotHistogram(myImageCopy, ui->plot);
 }

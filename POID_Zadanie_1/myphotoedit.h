@@ -13,5 +13,7 @@ QImage arithmeticMeanFilter(QImage myImage, int size = 1);
 QImage medianFilter(QImage myImage, int size = 1);
 void plotHistogram(QImage myImage, QCustomPlot *myPlot);
 QImage lowPassFilter(QImage myImage, int size);
+QImage operatorRobertsV2(QImage myImage);
+QImage distributionRayleigh(QImage myImage, int gMin, double alfa);
 
 #endif MYPHOTOEDIT_H
