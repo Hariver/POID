@@ -113,6 +113,7 @@ void Zadanie_1::on_pushButton_3_clicked()
 void Zadanie_1::on_pushButton_4_clicked()
 {
     plotHistogram(myImageCopy, ui->plot);
+    plotHistogram(myImage, ui->plot_3);
 }
 
 void Zadanie_1::on_pushButton_5_clicked()
