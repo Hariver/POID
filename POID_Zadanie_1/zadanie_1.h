@@ -39,6 +39,8 @@ private slots:
 
     void on_pushButton_7_clicked();
 
+    void on_actionSave_triggered();
+
 private:
     Ui::Zadanie_1 *ui;
     QImage myImage;

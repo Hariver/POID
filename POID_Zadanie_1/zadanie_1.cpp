@@ -5,6 +5,7 @@
 
 #include <QFileDialog>
 #include <QImage>
+#include <QIODevice>
 
 
 
@@ -142,4 +143,17 @@ void Zadanie_1::on_pushButton_7_clicked()
     this->resize_label_pic_copy();
     ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
     plotHistogram(myImageCopy, ui->plot);
+}
+
+void Zadanie_1::on_actionSave_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    tr("Save File"),
+                                                    "/home",
+                                                    tr("Images (*.png *.xpm *.jpg)"));
+    QFile plik(filename);
+    plik.open(QIODevice::WriteOnly);
+    myImageCopy.save(&plik, "PNG");
+
+
 }
