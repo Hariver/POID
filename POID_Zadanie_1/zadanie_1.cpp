@@ -136,10 +136,8 @@ void Zadanie_1::on_pushButton_6_clicked()
 void Zadanie_1::on_pushButton_7_clicked()
 {
     int tempGMin;
-    double tempAlfa;
     tempGMin = ui->lineEdit_2->text().toInt();
-    tempAlfa = ui->lineEdit_3->text().toDouble();
-    myImageCopy = distributionRayleigh(myImage, tempGMin, tempAlfa);
+    myImageCopy = distributionRayleigh(myImage, tempGMin);
     this->resize_label_pic_copy();
     ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
     plotHistogram(myImageCopy, ui->plot);
@@ -154,6 +152,7 @@ void Zadanie_1::on_actionSave_triggered()
     QFile plik(filename);
     plik.open(QIODevice::WriteOnly);
     myImageCopy.save(&plik, "PNG");
+
 
 
 }

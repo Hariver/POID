@@ -153,6 +153,7 @@ QImage negativeImage(QImage myImage)
 QImage arithmeticMeanFilter(QImage myImage, int size)
 {
     //Kolor
+    QImage copyMyImage;
     QColor tempColor;
     QRgb tempColorType;
     int tempRed = 0;
@@ -165,6 +166,8 @@ QImage arithmeticMeanFilter(QImage myImage, int size)
     //Sprawdzenie formatu
     if(myImage.format() != QImage::Format_RGB32)
         myImage = myImage.convertToFormat(QImage::Format_RGB32);
+
+    copyMyImage = myImage;
 
     //Filtr w pętli
     for(int i=size; i<(myImage.width()-size); i++)
@@ -196,7 +199,7 @@ QImage arithmeticMeanFilter(QImage myImage, int size)
             //Przypisanie nowego piksela.
             tempColor.setRgb(tempRed, tempGreen, tempBlue);
             tempColorType = tempColor.rgb();
-            myImage.setPixel(i, j, tempColorType);
+            copyMyImage.setPixel(i, j, tempColorType);
 
             //Reset danych
             smallCounter = 0;
@@ -205,7 +208,7 @@ QImage arithmeticMeanFilter(QImage myImage, int size)
             tempBlue = 0;
         }
     }
-    return myImage;
+    return copyMyImage;
 }
 
 QImage medianFilter(QImage myImage, int size)
@@ -214,6 +217,7 @@ QImage medianFilter(QImage myImage, int size)
     int arraySize = (1+2*size)*(1+2*size)-1;
 
     //Kolor
+    QImage copyMyImage;
     QColor tempColor;
     QRgb tempColorType;
     int *tempRed = new int[arraySize];
@@ -232,6 +236,8 @@ QImage medianFilter(QImage myImage, int size)
     //Sprawdzenie formatu
     if(myImage.format() != QImage::Format_RGB32)
         myImage = myImage.convertToFormat(QImage::Format_RGB32);
+
+    copyMyImage = myImage;
 
     //Filtr w pętli
     for(int i=size; i<(myImage.width()-size); i++)
@@ -267,13 +273,13 @@ QImage medianFilter(QImage myImage, int size)
             //Przypisanie nowego piksela.
             tempColor.setRgb(tempRedMedian, tempGreenMedian, tempBlueMedian);
             tempColorType = tempColor.rgb();
-            myImage.setPixel(i, j, tempColorType);
+            copyMyImage.setPixel(i, j, tempColorType);
 
             //Reset danych
             smallCounter = 0;
         }
     }
-    return myImage;
+    return copyMyImage;
 }
 
 void plotHistogram(QImage myImage, QCustomPlot *myPlot)
@@ -380,7 +386,8 @@ void plotHistogram(QImage myImage, QCustomPlot *myPlot)
 
 QImage lowPassFilter(QImage myImage, int size)
 {
-    //Kolor
+    //Kolor]
+    QImage copyMyImage;
     QColor tempColor;
     QRgb tempColorType;
     int tempRed = 0;
@@ -417,6 +424,8 @@ QImage lowPassFilter(QImage myImage, int size)
     if(myImage.format() != QImage::Format_RGB32)
         myImage = myImage.convertToFormat(QImage::Format_RGB32);
 
+    copyMyImage = myImage;
+
     //Filtr w pętli
     for(int i=size; i<(myImage.width()-size); i++)
     {
@@ -444,7 +453,7 @@ QImage lowPassFilter(QImage myImage, int size)
             //Przypisanie nowego piksela.
             tempColor.setRgb(tempRed, tempGreen, tempBlue);
             tempColorType = tempColor.rgb();
-            myImage.setPixel(i, j, tempColorType);
+            copyMyImage.setPixel(i, j, tempColorType);
 
             //Reset danych
             smallCounter = 0;
@@ -460,12 +469,13 @@ QImage lowPassFilter(QImage myImage, int size)
     delete [] filterMask;
     filterMask = NULL;
 
-    return myImage;
+    return copyMyImage;
 }
 
 QImage operatorRobertsV2(QImage myImage)
 {
     //Kolor
+    QImage copyMyImage;
     QColor tempColor[4];
     QRgb tempColorType[4];
     int tempRed;
@@ -476,6 +486,7 @@ QImage operatorRobertsV2(QImage myImage)
     if(myImage.format() != QImage::Format_RGB32)
         myImage = myImage.convertToFormat(QImage::Format_RGB32);
 
+    copyMyImage = myImage;
 
     //Roberts
     for(int i=1; i<(myImage.width() - 1); i++)
@@ -510,14 +521,24 @@ QImage operatorRobertsV2(QImage myImage)
             //Przypisanie nowego piksela.
             tempColor[0].setRgb(tempRed, tempGreen, tempBlue);
             tempColorType[0] = tempColor[0].rgb();
-            myImage.setPixel(i, j, tempColorType[0]);
+            copyMyImage.setPixel(i, j, tempColorType[0]);
         }
     }
-    return myImage;
+    return copyMyImage;
 }
 
-QImage distributionRayleigh(QImage myImage, int gMin, double alfa)
+QImage distributionRayleigh(QImage myImage, int gMin)
 {
+    //Zmienne
+    QImage copyMyImage;
+    double alfa = 0;
+    int imgSize = myImage.width()*myImage.height();
+    int myLUT[3][256] = {0};
+    double pixCount[3] = {1.0, 1.0, 1.0};
+
+    //Obliczenie parametru "alfa"
+    alfa = 255.0 / (sqrt(2.0*log((double)imgSize)));
+
     //Kolor
     QColor tempColor;
     QRgb tempColorType;
@@ -525,15 +546,9 @@ QImage distributionRayleigh(QImage myImage, int gMin, double alfa)
     int tempGreen;
     int tempBlue;
 
-    //Deklaracja tablicy LUT (referencyjnej)
-    int myLUT[3][256];
-    float resultLUT[3][256];
-
     //Definicje zmiennych
     int xSize = 256;
     int ySize = 256;
-    long allPixels = myImage.width() * myImage.height();
-    float cumulativeDistribution[256];
     QVector<double> xAxis(xSize);
     QVector<double> yGreen(ySize), yRed(ySize), yBlue(ySize), yBrightness(ySize);
 
@@ -551,7 +566,9 @@ QImage distributionRayleigh(QImage myImage, int gMin, double alfa)
     if(myImage.format() != QImage::Format_RGB32)
         myImage = myImage.convertToFormat(QImage::Format_RGB32);
 
-    //Zczytanie ilości kolorów
+    copyMyImage = myImage;
+
+    //Zczytanie ilości kolorów do narysowania histogramu
     for(int i=0; i<myImage.width(); i++)
     {
         for(int j=0; j<myImage.height(); j++)
@@ -564,81 +581,31 @@ QImage distributionRayleigh(QImage myImage, int gMin, double alfa)
         }
     }
 
-    //Wypełnienie tablicy LUT (RED) - inicjalizacja
-    cumulativeDistribution[0] = 0;
-    resultLUT[0][0] = 0;
-
-    //Wypełnienie tablicy LUT (RED)
-    for(int i=1; i<=255; i++)
+    for(int i=0; i<=255; i++)
     {
-        //Dystrybuanta
-        cumulativeDistribution[i] = cumulativeDistribution[i-1] + (float)yRed[i];
-        if(cumulativeDistribution[i] != 0.0)
-            resultLUT[0][i] = float(gMin + pow(2*(alfa*alfa)*log(pow(cumulativeDistribution[i] / (float)allPixels, -1)), 0.5));
-        else
-            resultLUT[0][i] = 0;
-
-        if(abs(resultLUT[0][i] - resultLUT[0][i - 1]) * allPixels < 0)
+        pixCount[0] += yRed[i];
+        myLUT[0][i] = gMin + (int)sqrt(2*alfa*alfa*log(pow(pixCount[0]/(double)imgSize, -1)));
+        if(myLUT[0][i]<0)
             myLUT[0][i] = 0;
-        else if(abs(resultLUT[0][i] - resultLUT[0][i - 1]) * allPixels > 255)
+        else if(myLUT[0][i] > 255)
             myLUT[0][i] = 255;
-        else
-            myLUT[0][i] = abs(resultLUT[0][i] - resultLUT[0][i - 1]) * allPixels;
 
-        //Debug
-        qDebug() << "CZERWONY! Jasność:"<< i << ". Ilość pikseli (baza):" << yRed[i] << ". Wartość dystrybuanty:" << cumulativeDistribution[i];
-        qDebug() << "--------  Logarytm:" << log(pow(cumulativeDistribution[i] / (float)allPixels, -1));
-        qDebug() << "--------  Wynik równania:" << resultLUT[0][i];
-        qDebug() << "--------  Wartość piksela:" << myLUT[0][i];
-        qDebug() << "--------  Testowa:" << abs(resultLUT[0][i] - resultLUT[0][i - 1])*allPixels;
-        qDebug() << " ";
-    }
-
-    //Wypełnienie tablicy LUT (GREEN) - inicjalizacja
-    cumulativeDistribution[0] = 0;
-    resultLUT[1][0] = 0;
-
-    //Wypełnienie tablicy LUT (GREEN)
-    for(int i=1; i<=255; i++)
-    {
-        //Dystrybuanta
-        cumulativeDistribution[i] = cumulativeDistribution[i-1] + (float)yGreen[i];
-        if(cumulativeDistribution[i] != 0.0)
-            resultLUT[1][i] = float(gMin + pow(2*(alfa*alfa)*log(pow(cumulativeDistribution[i] / (float)allPixels, -1)), 0.5));
-        else
-            resultLUT[1][i] = 0;
-
-        if(abs(resultLUT[1][i] - resultLUT[1][i - 1]) * allPixels < 0)
+        pixCount[1] += yGreen[i];
+        myLUT[1][i] = gMin + (int)sqrt(2*alfa*alfa*log(pow(pixCount[1]/(double)imgSize, -1)));
+        if(myLUT[1][i]<0)
             myLUT[1][i] = 0;
-        else if(abs(resultLUT[1][i] - resultLUT[1][i - 1]) * allPixels > 255)
+        else if(myLUT[1][i] > 255)
             myLUT[1][i] = 255;
-        else
-            myLUT[1][i] = abs(resultLUT[1][i] - resultLUT[1][i - 1]) * allPixels;
-    }
 
-    //Wypełnienie tablicy LUT (BLUE) - inicjalizacja
-    cumulativeDistribution[0] = 0;
-    resultLUT[2][0] = 0;
-
-    //Wypełnienie tablicy LUT (BLUE)
-    for(int i=1; i<=255; i++)
-    {
-        //Dystrybuanta
-        cumulativeDistribution[i] = cumulativeDistribution[i-1] + (float)yGreen[i];
-        if(cumulativeDistribution[i] != 0.0)
-            resultLUT[2][i] = float(gMin + pow(2*(alfa*alfa)*log(pow(cumulativeDistribution[i] / (float)allPixels, -1)), 0.5));
-        else
-            resultLUT[2][i] = 0;
-
-        if(abs(resultLUT[2][i] - resultLUT[2][i - 1]) * allPixels < 0)
+        pixCount[2] += yBlue[i];
+        myLUT[2][i] = gMin + (int)sqrt(2*alfa*alfa*log(pow(pixCount[2]/(double)imgSize, -1)));
+        if(myLUT[2][i]<0)
             myLUT[2][i] = 0;
-        else if(abs(resultLUT[1][i] - resultLUT[2][i - 1]) * allPixels > 255)
+        else if(myLUT[2][i] > 255)
             myLUT[2][i] = 255;
-        else
-            myLUT[2][i] = abs(resultLUT[2][i] - resultLUT[2][i - 1]) * allPixels;
     }
 
-    //Przypisanie nowych wartości po wyrównaniu histogramu
+    //Przypisanie
     for(int i=0; i<myImage.width(); i++)
     {
         for(int j=0; j<myImage.height(); j++)
@@ -652,8 +619,11 @@ QImage distributionRayleigh(QImage myImage, int gMin, double alfa)
             //Przypisanie nowego piksela.
             tempColor.setRgb(tempRed, tempGreen, tempBlue);
             tempColorType = tempColor.rgb();
-            myImage.setPixel(i, j, tempColorType);
+            copyMyImage.setPixel(i, j, tempColorType);
         }
     }
-    return myImage;
+
+    //copyMyImage = negativeImage(copyMyImage);
+
+    return copyMyImage;
 }

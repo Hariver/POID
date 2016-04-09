@@ -188,22 +188,6 @@
       <string>Kontrast:</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>75</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Negatyw</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButton_4">
      <property name="geometry">
       <rect>
@@ -217,26 +201,13 @@
       <string>Plot</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>80</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Roberts</string>
-     </property>
-    </widget>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>100</x>
        <y>120</y>
-       <width>182</width>
-       <height>135</height>
+       <width>131</width>
+       <height>121</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -273,10 +244,10 @@
     <widget class="QWidget" name="layoutWidget_2">
      <property name="geometry">
       <rect>
-       <x>290</x>
+       <x>240</x>
        <y>120</y>
        <width>110</width>
-       <height>137</height>
+       <height>71</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -295,20 +266,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Alfa</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit_3">
-        <property name="text">
-         <string>0.1</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="pushButton_7">
         <property name="text">
          <string>Raleigh</string>
@@ -320,7 +277,7 @@
     <widget class="QPushButton" name="pushButton_8">
      <property name="geometry">
       <rect>
-       <x>420</x>
+       <x>430</x>
        <y>220</y>
        <width>71</width>
        <height>32</height>
@@ -329,6 +286,35 @@
      <property name="text">
       <string>Reset</string>
      </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>82</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QPushButton" name="pushButton_6">
+        <property name="text">
+         <string>Roberts</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Negatyw</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QCustomPlot" name="plot" native="true">
@@ -349,6 +335,19 @@
       <width>371</width>
       <height>241</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_9">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>390</y>
+      <width>80</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>FullSize</string>
     </property>
    </widget>
   </widget>

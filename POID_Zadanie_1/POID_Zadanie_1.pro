@@ -25,3 +25,5 @@ HEADERS  += zadanie_1.h \
     qcustomplot.h
 
 FORMS    += zadanie_1.ui
+
+RESOURCES +=
