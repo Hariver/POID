@@ -40,7 +40,11 @@ void Zadanie_1::on_actionOpen_triggered()
     {
         myImage.load(fileName);
         this->resize_label_pic();
-        ui->label_pic->setPixmap(QPixmap::fromImage(myImage));
+        if(ui->dockWidget_2->isFloating())
+            ui->label_pic->setPixmap(QPixmap::fromImage(myImage));
+        else
+            ui->label_pic->setPixmap(QPixmap::fromImage(myImageResize));
+        plotHistogram(myImage, ui->plot_3);
     }
 }
 
@@ -54,7 +58,7 @@ void Zadanie_1::resize_label_pic()
     label_picWidth = ui->label_pic->width();
 
     if(picHeight > label_picHeight || picWidth > label_picWidth)
-        myImage = myImage.scaled(label_picWidth, label_picHeight, Qt::KeepAspectRatio);
+        myImageResize = myImage.scaled(label_picWidth, label_picHeight, Qt::KeepAspectRatio);
 }
 
 void Zadanie_1::resize_label_pic_copy()
@@ -67,14 +71,18 @@ void Zadanie_1::resize_label_pic_copy()
     label_picWidth = ui->label_pic_copy->width();
 
     if(picHeight > label_picHeight || picWidth > label_picWidth)
-        myImageCopy = myImageCopy.scaled(label_picWidth, label_picHeight, Qt::KeepAspectRatio);
+        myImageCopyResize = myImageCopy.scaled(label_picWidth, label_picHeight, Qt::KeepAspectRatio);
 }
 
 void Zadanie_1::on_horizontalSlider_sliderMoved()
 {
     myImageCopy = changeBrightness(myImage, ui->horizontalSlider->value());
     this->resize_label_pic_copy();
-    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    if(ui->dockWidget_3->isFloating())
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    else
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
+    plotHistogram(myImageCopy, ui->plot);
 }
 
 void Zadanie_1::on_horizontalSlider_2_sliderMoved()
@@ -83,14 +91,22 @@ void Zadanie_1::on_horizontalSlider_2_sliderMoved()
     tempContrast = ui->horizontalSlider_2->value() / 100.0;
     myImageCopy = changeContrast(myImage, tempContrast);
     this->resize_label_pic_copy();
-    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    if(ui->dockWidget_3->isFloating())
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    else
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
+    plotHistogram(myImageCopy, ui->plot);
 }
 
 void Zadanie_1::on_pushButton_clicked()
 {
     myImageCopy = negativeImage(myImage);
     this->resize_label_pic_copy();
-    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    if(ui->dockWidget_3->isFloating())
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    else
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
+    plotHistogram(myImageCopy, ui->plot);
 }
 
 void Zadanie_1::on_pushButton_2_clicked()
@@ -99,7 +115,11 @@ void Zadanie_1::on_pushButton_2_clicked()
     tempSize = ui->lineEdit->text().toInt();
     myImageCopy = arithmeticMeanFilter(myImage, tempSize);
     this->resize_label_pic_copy();
-    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    if(ui->dockWidget_3->isFloating())
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    else
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
+    plotHistogram(myImageCopy, ui->plot);
 }
 
 void Zadanie_1::on_pushButton_3_clicked()
@@ -108,7 +128,10 @@ void Zadanie_1::on_pushButton_3_clicked()
     tempSize = ui->lineEdit->text().toInt();
     myImageCopy = medianFilter(myImage, tempSize);
     this->resize_label_pic_copy();
-    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    if(ui->dockWidget_3->isFloating())
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    else
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
 }
 
 void Zadanie_1::on_pushButton_4_clicked()
@@ -123,14 +146,22 @@ void Zadanie_1::on_pushButton_5_clicked()
     tempSize = ui->lineEdit->text().toInt();
     myImageCopy = lowPassFilter(myImage, tempSize);
     this->resize_label_pic_copy();
-    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    if(ui->dockWidget_3->isFloating())
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    else
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
+    plotHistogram(myImageCopy, ui->plot);
 }
 
 void Zadanie_1::on_pushButton_6_clicked()
 {
     myImageCopy = operatorRobertsV2(myImage);
     this->resize_label_pic_copy();
-    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    if(ui->dockWidget_3->isFloating())
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    else
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
+    plotHistogram(myImageCopy, ui->plot);
 }
 
 void Zadanie_1::on_pushButton_7_clicked()
@@ -139,7 +170,10 @@ void Zadanie_1::on_pushButton_7_clicked()
     tempGMin = ui->lineEdit_2->text().toInt();
     myImageCopy = distributionRayleigh(myImage, tempGMin);
     this->resize_label_pic_copy();
-    ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    if(ui->dockWidget_3->isFloating())
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    else
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
     plotHistogram(myImageCopy, ui->plot);
 }
 
@@ -155,4 +189,45 @@ void Zadanie_1::on_actionSave_triggered()
 
 
 
+}
+
+void Zadanie_1::on_dockWidget_2_topLevelChanged(bool topLevel)
+{
+    if(topLevel)
+    {
+        ui->label_pic->setFixedHeight(myImage.height());
+        ui->label_pic->setFixedWidth(myImage.width());
+        ui->dockWidget_2->setFixedHeight(myImage.height());
+        ui->dockWidget_2->setFixedWidth(myImage.width());
+        ui->label_pic->setPixmap(QPixmap::fromImage(myImage));
+    }
+    else if(!topLevel)
+    {
+        ui->label_pic->setFixedHeight(331);
+        ui->label_pic->setFixedWidth(631);
+        ui->dockWidget_2->setFixedHeight(381);
+        ui->dockWidget_2->setFixedWidth(632);
+        ui->label_pic->setPixmap(QPixmap::fromImage(myImageResize));
+    }
+}
+
+void Zadanie_1::on_dockWidget_3_topLevelChanged(bool topLevel)
+{
+    if(topLevel)
+    {
+       ui->label_pic_copy->setFixedHeight(myImageCopy.height());
+       ui->label_pic_copy->setFixedWidth(myImageCopy.width());
+       ui->dockWidget_3->setFixedHeight(myImageCopy.height());
+       ui->dockWidget_3->setFixedWidth(myImageCopy.width());
+       ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopy));
+    }
+    else if(!topLevel)
+    {
+        ui->label_pic_copy->setFixedHeight(331);
+        ui->label_pic_copy->setFixedWidth(631);
+        ui->dockWidget_3->setFixedHeight(381);
+        ui->dockWidget_3->setFixedWidth(632);
+        this->resize_label_pic_copy();
+        ui->label_pic_copy->setPixmap(QPixmap::fromImage(myImageCopyResize));
+    }
 }

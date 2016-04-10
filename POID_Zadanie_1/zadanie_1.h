@@ -41,10 +41,16 @@ private slots:
 
     void on_actionSave_triggered();
 
+    void on_dockWidget_2_topLevelChanged(bool topLevel);
+
+    void on_dockWidget_3_topLevelChanged(bool topLevel);
+
 private:
     Ui::Zadanie_1 *ui;
     QImage myImage;
     QImage myImageCopy;
+    QImage myImageResize;
+    QImage myImageCopyResize;
     void resize_label_pic();
     void resize_label_pic_copy();
 };

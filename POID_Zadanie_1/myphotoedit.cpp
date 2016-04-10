@@ -623,7 +623,7 @@ QImage distributionRayleigh(QImage myImage, int gMin)
         }
     }
 
-    //copyMyImage = negativeImage(copyMyImage);
+    copyMyImage = negativeImage(copyMyImage);
 
     return copyMyImage;
 }
